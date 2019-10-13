@@ -8,6 +8,5 @@
 
 Inside your project:
 
-1. Run `gitquick` in terminal
-2. When prompted, enter your commit message
-3. gitquick runs: `git add -A`, `git commit -m (your commit message)`, and `git push` for you
+1. Run `gitquick "<your_commit_message>"` in terminal
+2. gitquick runs: `git add -A`, `git commit -m (your commit message)`, and `git push` for you
