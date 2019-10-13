@@ -7,9 +7,9 @@ program
   .option('[message]')
   .description('Add, Commit, and Push')
   .action(async (message) => {
-    const spinner = ora('Nice code! Committing and pushing...').start()
+    const spinner = ora('Committing and pushing...').start()
     await runner(message);
-    spinner.succeed();
+    spinner.succeed('Nice jerb!');
   });
 
 program.parse(process.argv);
