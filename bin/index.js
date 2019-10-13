@@ -15,7 +15,7 @@ program
   .option('[message]')
   .description('Add, Commit, and Push')
   .action((message) => {
-    console.log(message)
+    console.log('Nice code! Committing and pushing to git...')
     runner(message);
   });
 
