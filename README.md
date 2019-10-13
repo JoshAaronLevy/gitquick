@@ -10,4 +10,4 @@ Inside your project:
 
 > Run `gitquick "<your_commit_message>"` in terminal
 
-gitquick runs: `git add -A`, `git commit -m (your commit message)`, and `git push` for you
+gitquick runs: `git add -A`, `git commit -m "<your_commit_message>"`, and `git push` for you
