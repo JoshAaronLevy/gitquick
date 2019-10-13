@@ -1,14 +1,17 @@
 {
   "name": "gitquick",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Git Add, Commit, and Push on the Fly",
+  "repository": {
+    "url": "https://github.com/JoshAaronLevy/gitquick"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Josh Levy",
   "license": "ISC",
-  "preferGlobal": false,
+  "preferGlobal": true,
   "bin": {
     "gitquick": "./bin/index.js"
   },
