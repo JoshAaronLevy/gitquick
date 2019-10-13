@@ -1,0 +1,1 @@
+exports.gitquick = require('./lib/gitquick');
