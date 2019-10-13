@@ -1,21 +1,14 @@
 #!/usr/bin/env node
 const program = require('commander');
-// const gitquick = require('../lib/gitquick');
 const runner = require('../lib/runner.js');
-
-// program
-//   .description('Add, Commit, and Push')
-//   .action(function () {
-//     gitquick();
-//   });
-
-// program.parse(process.argv);
+const ora = require('ora');
 
 program
   .option('[message]')
   .description('Add, Commit, and Push')
   .action((message) => {
-    console.log('Nice code! Committing and pushing to git...')
+    ora('Nice code! Committing and pushing...')
+    // console.log('Nice code! Committing and pushing to git...')
     runner(message);
   });
 
