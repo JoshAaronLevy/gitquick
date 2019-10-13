@@ -10,6 +10,7 @@ program
     ora('Nice code! Committing and pushing...').start()
     // console.log('Nice code! Committing and pushing to git...')
     runner(message);
+    ora().stop();
   });
 
 program.parse(process.argv);
