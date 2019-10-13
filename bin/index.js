@@ -6,9 +6,9 @@ const ora = require('ora');
 program
   .option('[message]')
   .description('Add, Commit, and Push')
-  .action((message) => {
+  .action(async (message) => {
     const spinner = ora('Nice code! Committing and pushing...').start()
-    runner(message);
+    await runner(message);
     spinner.stop();
   });
 
