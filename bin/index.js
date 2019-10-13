@@ -9,7 +9,7 @@ program
   .action(async (message) => {
     const spinner = ora('Nice code! Committing and pushing...').start()
     await runner(message);
-    spinner.succeed();
+    spinner.clear();
   });
 
 program.parse(process.argv);
