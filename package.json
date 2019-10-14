@@ -1,6 +1,6 @@
 {
   "name": "gitquick",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Git Add, Commit, and Push on the Fly",
   "repository": {
     "url": "https://github.com/JoshAaronLevy/gitquick"
@@ -11,7 +11,11 @@
   },
   "author": "Josh Levy",
   "keywords": [
-    "git"
+    "git",
+    "utility",
+    "helper",
+    "terminal",
+    "shell"
   ],
   "license": "MIT",
   "preferGlobal": true,
