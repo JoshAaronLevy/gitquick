@@ -26,7 +26,6 @@
     "events": "^3.0.0",
     "execa": "^2.1.0",
     "fs-extra": "^8.1.0",
-    "inquirer": "^7.0.0",
     "jscodeshift": "^0.6.4",
     "lodash": "^4.17.15",
     "ora": "^4.0.2",
