@@ -2,7 +2,7 @@
 
 ## Installation
 
-> `npm i -g gitquick`
+`npm i -g gitquick`
 
 ## Usage
 
