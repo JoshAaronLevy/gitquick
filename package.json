@@ -19,7 +19,6 @@
     "gitquick": "./bin/index.js"
   },
   "dependencies": {
-    "child_process": "^1.0.2",
     "commander": "^3.0.2",
     "debug": "^4.1.1",
     "deepmerge": "^4.1.1",
