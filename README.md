@@ -17,4 +17,3 @@ gitquick automatically runs the following 3 commands:
 ### Windows Users
 
 **NOTE:** Currently, you need to use a terminal like [Git Bash](https://git-scm.com/downloads) to run gitquick. Support for Powershell coming soon.
-
