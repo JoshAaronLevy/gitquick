@@ -1,6 +1,6 @@
 {
   "name": "gitquick",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Git Add, Commit, and Push on the Fly",
   "repository": {
     "url": "https://github.com/JoshAaronLevy/gitquick"
@@ -9,7 +9,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Josh Levy",
+  "author": {
+    "name": "Josh Levy"
+  },
   "keywords": [
     "git",
     "utility",
