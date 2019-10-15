@@ -18,9 +18,7 @@ program
   .option('[message]')
   .description('Add, Commit, and Push')
   .action(function(message) {
-    // const spinner = ora(`Nice code! Adding, committing and pushing...`).start()
     runner(message);
-    // spinner.succeed(`"${message}" successfully committed and pushed!`);
   });
 
 program.parse(process.argv);
