@@ -3,8 +3,10 @@ const program = require('commander');
 const runner = require('../lib/runner.js');
 
 program
+  .version('0.12.0')
   .option('[message]')
-  .description('Add, Commit, and Push')
+  .option('-v', '--version', '[version]')
+  .description('Add, Commit, and Push on the Fly')
   .action(async (message) => {
     await runner(message);
   });
