@@ -14,9 +14,25 @@ gitquick automatically runs the following 3 commands:
 
 `git add -A`, `git commit -m "<your_commit_message>"`, and `git push`
 
-## One Command
+### Quickest and Easiest Way to Add, Commit, and Push
 
-![gitquick command](assets/img/gitquick-example_01.png)
+![gitquick example](assets/img/gitquick-example.gif)
+
+### Git Add, Commit, and Push With Only One Command
+
+![gitquick command](assets/img/gitquick-example_01_command.png)
+
+### Loading Spinners Indicate and Confirm Progress
+
+![gitquick progress](assets/img/gitquick-example_02_progress.png)
+
+### Clear, Tightly Grouped Success/Error Indication
+
+![gitquick success](assets/img/gitquick-example_03_success.png)
+
+### Error Handling That Keeps Your Console Clutter-Free
+
+![gitquick error](assets/img/gitquick-example_04_error.png)
 
 ### Windows Users
 
