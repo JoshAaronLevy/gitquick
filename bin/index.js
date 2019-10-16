@@ -5,7 +5,7 @@ const runner = require('../lib/runner.js');
 program
   .description(`Example: gitquick "I fixed a bug"`)
   .option('[message]')
-  .version('1.1.2', '-v, --version')
+  .version('1.1.3', '-v, --version')
   .action(async (message) => {
     await runner(message);
   });
