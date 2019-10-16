@@ -14,6 +14,10 @@ gitquick automatically runs the following 3 commands:
 
 `git add -A`, `git commit -m "<your_commit_message>"`, and `git push`
 
+## One Command
+
+["./assets/img/gitquick-example_01.png"]
+
 ### Windows Users
 
 **NOTE:** Currently, you need to use a terminal like [Git Bash](https://git-scm.com/downloads) to run gitquick. Support for Powershell coming soon.
