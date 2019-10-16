@@ -2,10 +2,10 @@
 
 ## TOC
 
-- [Installation](##Installation)
-- [Usage](##Usage)
-- [Preview](##Preview)
-- [Features](##Features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Preview](#preview)
+- [Features](#features)
 
 ### Installation
 
