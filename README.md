@@ -20,9 +20,13 @@ gitquick automatically runs the following 3 commands:
 ![gitquick example](assets/img/gitquick-example.gif)
 
 
+
+
 ## Git Add, Commit, and Push With Only One Command
 
 ![gitquick command](assets/img/gitquick-example_01_command.png)
+
+
 
 
 ## Loading Spinners Indicate and Confirm Progress
@@ -30,14 +34,20 @@ gitquick automatically runs the following 3 commands:
 ![gitquick progress](assets/img/gitquick-example_02_progress.png)
 
 
+
+
 ## Clear, Tightly Grouped Success/Error Indication
 
 ![gitquick success](assets/img/gitquick-example_03_success.png)
 
 
+
+
 ## Error Handling That Keeps Your Console Clutter-Free
 
 ![gitquick error](assets/img/gitquick-example_04_error.png)
+
+
 
 
 ## Windows Users
