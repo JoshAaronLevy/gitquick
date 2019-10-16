@@ -16,7 +16,7 @@ gitquick automatically runs the following 3 commands:
 
 ## One Command
 
-["./assets/img/gitquick-example_01.png"]
+![gitquick command]("./assets/img/gitquick-example_01.png")
 
 ### Windows Users
 
