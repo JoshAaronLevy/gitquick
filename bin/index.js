@@ -16,7 +16,7 @@ program
     }
     // console.log(message);
     // console.log(commit);
-    await runner(message);
+    await runner(message, commit);
   });
 
 program.parse(process.argv);
