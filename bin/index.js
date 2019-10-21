@@ -14,8 +14,6 @@ program
     } else {
       commit = true;
     }
-    // console.log(message);
-    // console.log(commit);
     await runner(message, commit);
   });
 
