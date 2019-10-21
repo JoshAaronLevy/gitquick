@@ -4,6 +4,7 @@
 
 - [Installation](#installation)
 - [Usage](#usage)
+- [New](#new)
 - [Preview](#preview)
 - [Features](#features)
 - [Windows Users](#windows-users)
@@ -21,6 +22,14 @@ Inside your project directory, run the following in your terminal:
 gitquick automatically runs the following 3 commands:
 
 `git add -A`, `git commit -m "<your_commit_message>"`, and `git push`
+
+## New
+
+**v2.x**: Added user-requested option to easily add and commit only (omitting push step)
+
+Example:
+
+`gitquick -c "<your_commit_message>"`
 
 ## Preview
 

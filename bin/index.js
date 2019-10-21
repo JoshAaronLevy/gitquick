@@ -6,7 +6,7 @@ program
   .description(`Example: gitquick "I fixed a bug"`)
   .option('[message]')
   .option('-c, --commit')
-  .version('1.5.2', '-v, --version')
+  .version('2.0.1', '-v, --version')
   .action(async (message, command) => {
     let commit = command.commit;
     if (!commit) {
