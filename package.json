@@ -27,6 +27,7 @@
     "gitquick": "./bin/index.js"
   },
   "dependencies": {
+    "chalk": "^2.4.2",
     "commander": "^3.0.2",
     "execa": "^2.1.0",
     "ora": "^4.0.2"
