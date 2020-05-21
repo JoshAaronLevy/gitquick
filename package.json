@@ -1,6 +1,6 @@
 {
   "name": "gitquick",
-  "version": "2.5.2",
+  "version": "2.5.3",
   "description": "Git Add, Commit, and Push on the Fly",
   "repository": {
     "url": "https://github.com/JoshAaronLevy/gitquick"
