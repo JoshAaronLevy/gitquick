@@ -13,7 +13,7 @@
 
 `npm i -g gitquick`
 
-## Usage
+## How To Use
 
 Inside your project directory, run the following in your terminal:
 
