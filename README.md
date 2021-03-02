@@ -1,4 +1,4 @@
-# gitquick - Git Add, Commit, and Push on the Fly
+# gitquick - Git Add, Commit, and Push at once
 
 ## TOC
 
