@@ -9,7 +9,7 @@
 	"scripts": {
 		"start": "node ./public/bin/index.js",
 		"build": "rm -rf public && tsc",
-		"deploy": "git add -A && git commit -m \"updated version\" && git push && npm publish"
+		"deploy": "npm run build && git add -A && git commit -m \"updated version\" && git push && npm publish"
 	},
 	"author": {
 		"name": "Josh Levy"
