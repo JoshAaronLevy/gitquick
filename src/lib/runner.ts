@@ -1,38 +1,40 @@
-const execa = require('execa');
-const directory = process.cwd();
-const ora = require('ora');
-const chalk = require('chalk');
-let httpsUrl = '';
-let sshUrl = '';
-let gitHubUrl = '';
+import execa from 'execa';
+import ora from 'ora';
+import chalk from 'chalk';
 
-module.exports = async (message, commit) => {
+const directory = process.cwd();
+let httpsUrl: string = '';
+let sshUrl: string = '';
+let gitHubUrl: any = '';
+let pOptions: any = { cwd: directory, all: true };
+
+export const runner = async (message: string, commit: boolean) => {
 	try {
-		const p = await execa('git', ['remote', '-v'], {
-			cwd: directory,
-			all: true,
-		});
-		if (p.all.match(/\bgit@github.com?:\S+/gi) != null) {
-			sshUrl = p.all.match(/\bgit@github.com?:\S+/gi)[0];
-			gitHubUrl = sshUrl.substring(0, sshUrl.length - 4);
-		} else if (p.all.match(/\bgit@gitlab.com?:\S+/gi) != null) {
-			sshUrl = p.all.match(/\bgit@gitlab.com?:\S+/gi)[0];
-			gitHubUrl = sshUrl.substring(0, sshUrl.length - 4);
-		} else if (p.all.match(/\bhttps?:\/\/\S+/gi) != null) {
-			httpsUrl = p.all.match(/\bhttps?:\/\/\S+/gi)[0];
-			gitHubUrl = httpsUrl.substring(0, httpsUrl.length - 4);
-		} else if (p.all.match(/\bgit@ssh.dev.azure.com?:\S+/gi) != null) {
-			azureRepo = true;
-			sshUrl = p.all.match(/\bgit@ssh.dev.azure.com?:\S+/gi)[0];
-			gitHubUrl = sshUrl.substring(25, sshUrl.length);
-		}
+		const p = await execa('git', ['remote', '-v'], pOptions);
+		gitHubUrl = await getRepoUrls(p);
 	} catch (error) {
-		console.log(error);
+		return error;
 	}
 	await gitAddStep(message, commit);
 };
 
-const gitAddStep = function (message, commit) {
+const getRepoUrls = async (p) => {
+	if (p.all.match(/\bgit@github.com?:\S+/gi) != null) {
+		sshUrl = p.all.match(/\bgit@github.com?:\S+/gi)[0];
+		return sshUrl.substring(0, sshUrl.length - 4);
+	} else if (p.all.match(/\bgit@gitlab.com?:\S+/gi) != null) {
+		sshUrl = p.all.match(/\bgit@gitlab.com?:\S+/gi)[0];
+		return sshUrl.substring(0, sshUrl.length - 4);
+	} else if (p.all.match(/\bhttps?:\/\/\S+/gi) != null) {
+		httpsUrl = p.all.match(/\bhttps?:\/\/\S+/gi)[0];
+		return httpsUrl.substring(0, httpsUrl.length - 4);
+	} else if (p.all.match(/\bgit@ssh.dev.azure.com?:\S+/gi) != null) {
+		sshUrl = p.all.match(/\bgit@ssh.dev.azure.com?:\S+/gi)[0];
+		return sshUrl.substring(25, sshUrl.length);
+	}
+};
+
+const gitAddStep = function (message: string, commit: boolean) {
 	const spinner = ora(`Adding file(s)...`).start();
 	const p = execa('git', ['add', '-A'], { cwd: directory })
 		.then(() => {
@@ -42,7 +44,7 @@ const gitAddStep = function (message, commit) {
 			if (commit === true) {
 				gitCommitOnly(message);
 			} else {
-				gitCommitStep(message, commit);
+				gitCommitStep(message);
 			}
 		}).catch((p) => {
 			spinner.fail(
@@ -53,7 +55,7 @@ const gitAddStep = function (message, commit) {
 	return p;
 };
 
-const gitCommitOnly = function (message) {
+export const gitCommitOnly = function (message: string) {
 	const spinner = ora(`Committing your awesome code...`).start();
 	let p = execa('git', ['commit', '-m', `"${message}"`], { cwd: directory })
 		.then(() => {
@@ -70,7 +72,7 @@ const gitCommitOnly = function (message) {
 	return p;
 };
 
-const gitCommitStep = function (message) {
+export const gitCommitStep = function (message: string) {
 	const spinner = ora(`Committing your awesome code...`).start();
 	const commitMessage = `${message.replace(/"/g, `""`)}`;
 	let p = execa('git', ['commit', '-m', commitMessage], { cwd: directory })
@@ -89,7 +91,7 @@ const gitCommitStep = function (message) {
 	return p;
 };
 
-const gitPushStep = function (message) {
+const gitPushStep = function (message: string) {
 	const spinner = ora(`Pushing "${message}" to remote repository...`).start();
 	const p = execa('git', ['push'], { cwd: directory })
 		.then((p) => {
@@ -115,18 +117,18 @@ const gitPushStep = function (message) {
 	return p;
 };
 
-const gitFindBranch = function (message) {
+const gitFindBranch = function (message: string) {
 	const p = execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd: directory })
 		.then((p) => {
-			currentBranch = p.stdout;
-			gitPushUpstream(currentBranch);
+			const currentBranch = p.stdout;
+			gitPushUpstream(currentBranch, message);
 		}).catch((p) => {
 			return p.all;
 		});
 	return p;
 };
 
-const gitPushUpstream = function (currentBranch) {
+const gitPushUpstream = function (currentBranch: string, message: string) {
 	const spinner = ora(`Attempting to set ${currentBranch} as upstream and push...`).start();
 	const p = execa('git', ['push', '-u', 'origin', `${currentBranch}`], { cwd: directory })
 		.then(() => {

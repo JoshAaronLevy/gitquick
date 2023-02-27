@@ -1,35 +1,44 @@
 {
-  "name": "gitquick",
-  "version": "2.11.16",
-  "description": "Git Add, Commit, and Push on the Fly",
-  "repository": {
-    "url": "https://github.com/JoshAaronLevy/gitquick"
-  },
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": {
-    "name": "Josh Levy"
-  },
-  "keywords": [
-    "git",
-    "vcs",
-    "command",
-    "utility",
-    "helper",
-    "terminal",
-    "shell"
-  ],
-  "license": "MIT",
-  "preferGlobal": true,
-  "bin": {
-    "gitquick": "./bin/index.js"
-  },
-  "dependencies": {
-    "chalk": "^2.4.2",
-    "commander": "^3.0.2",
-    "execa": "^2.1.0",
-    "ora": "^4.0.2"
-  }
+	"name": "gitquick",
+	"version": "2.11.16",
+	"description": "Git Add, Commit, and Push on the Fly",
+	"repository": {
+		"url": "https://github.com/JoshAaronLevy/gitquick"
+	},
+	"main": "./public/bin/index.js",
+	"scripts": {
+		"start": "node ./public/bin/index.js",
+		"build": "rm -rf public && tsc",
+		"deploy": "git add -A && git commit -m \"updated version\" && git push && npm publish"
+	},
+	"author": {
+		"name": "Josh Levy"
+	},
+	"keywords": [
+		"git",
+		"vcs",
+		"command",
+		"utility",
+		"helper",
+		"terminal",
+		"shell"
+	],
+	"license": "MIT",
+	"preferGlobal": true,
+	"bin": {
+		"gitquick": "./public/bin/index.js"
+	},
+	"dependencies": {
+		"chalk": "^2.4.2",
+		"commander": "^3.0.2",
+		"execa": "^2.1.0",
+		"ora": "^4.0.2"
+	},
+	"devDependencies": {
+		"@types/node": "^18.14.2",
+		"@typescript-eslint/parser": "^5.53.0",
+		"ts-node": "^10.9.1",
+		"ts-node-dev": "^2.0.0",
+		"typescript": "^4.9.5"
+	}
 }

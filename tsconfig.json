@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "commonjs",
+		"outDir": "public",
+		"rootDir": "src",
+		"strict": true,
+		"noImplicitAny": false,
+		"strictNullChecks": true,
+		"checkJs": true,
+		"allowJs": true,
+		"moduleResolution": "node",
+		"types": ["node"],
+		"lib": ["es6"],
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"allowUnreachableCode": true,
+		"useUnknownInCatchVariables": false
+	},
+	"include": ["src/**/*.ts", "src/**/*.js"],
+	"exclude": ["node_modules", "<node_internals>/**"]
+}
