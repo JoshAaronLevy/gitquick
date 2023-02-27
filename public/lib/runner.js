@@ -11,7 +11,6 @@ const directory = process.cwd();
 let httpsUrl = '';
 let sshUrl = '';
 let gitHubUrl = '';
-let message = '';
 let pOptions = { cwd: directory, all: true };
 const runner = async (message, commit) => {
     try {
@@ -110,13 +109,13 @@ const gitFindBranch = function (message) {
     const p = (0, execa_1.default)('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd: directory })
         .then((p) => {
         const currentBranch = p.stdout;
-        gitPushUpstream(currentBranch);
+        gitPushUpstream(currentBranch, message);
     }).catch((p) => {
         return p.all;
     });
     return p;
 };
-const gitPushUpstream = function (currentBranch) {
+const gitPushUpstream = function (currentBranch, message) {
     const spinner = (0, ora_1.default)(`Attempting to set ${currentBranch} as upstream and push...`).start();
     const p = (0, execa_1.default)('git', ['push', '-u', 'origin', `${currentBranch}`], { cwd: directory })
         .then(() => {
