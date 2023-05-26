@@ -9,6 +9,7 @@ program
 	.version("1.2.2", "-v, --version")
 	.arguments("[message]")
 	.action(async (message) => {
+		console.log("program: ", program);
 		console.log("message: ", message);
 		console.log("options: ", program.opts());
 		if (program.opts().commitOnly) {
