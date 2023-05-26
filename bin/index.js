@@ -8,17 +8,13 @@ program
 	.argument('[message]')
 	.version('4.4.3', '-v, --version')
 	.action(async (message) => {
-		console.log('message: ', message);
 		const processArgs = process.argv.slice(2);
-		console.log('processArgs: ', processArgs);
 		if (processArgs.length > 1) {
 			message = processArgs.slice(0, processArgs.length).join(' ');
 		}
-		console.log('message: ', message);
 		try {
 			if (!message) message = await inputCommitMessage();
 			if (message) {
-				// console.log('program: ', program);
 				return await runner(message);
 			} else {
 				console.log('Unable to initiate commit process. Please try again.');
