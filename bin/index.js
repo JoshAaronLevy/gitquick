@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const program = require("commander");
-// const program = new commander.Command();
+const { Command } = require("commander");
+const program = new Command();
 const runner = require("../lib/runner.js");
 const prompt = require("../lib/prompt.js");
 
@@ -13,6 +13,7 @@ program
 	.description("Example: gitquick \"I fixed a bug\"")
 	.option("[message]")
 	.option("-c, --commit", "Commit changes only without pushing to remote repository", false)
+	.version("4.4.2")
 	.action(async (command, options) => {
 		let message;
 		// console.log("command: ", command);
