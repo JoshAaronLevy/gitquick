@@ -9,6 +9,8 @@ const prompt = require("../lib/prompt.js");
 // 	.description("CLI to add, commit and push changes to remote repository in one step")
 // 	.version("4.4.2");
 
+console.log("process.argv: ", process.argv);
+
 program
 	.description("Example: gitquick \"I fixed a bug\"")
 	.option("[message]")
