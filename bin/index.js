@@ -8,6 +8,8 @@ program
 	.argument('[message]')
 	.version('4.4.3', '-v, --version')
 	.action(async (message) => {
+		const processArgs = process.argv.slice(2);
+		console.log('processArgs: ', processArgs);
 		try {
 			if (!message) message = await inputCommitMessage();
 			if (message) {
