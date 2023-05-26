@@ -9,11 +9,10 @@ program
 	.option("-c, --commit")
 	.version("4.3.7", "-v, --version")
 	.action(async (message, command) => {
-		console.log("message: ", message);
 		console.log("command: ", command);
-		console.log("process.argv: ", process.argv);
 		let commit;
 		(!command || (command && !command.commit)) ? commit = false : commit = true;
+		console.log("commit: ", commit);
 		process.argv.length > 2 ? message = message.trim() : message = await prompt.commitMessageInput();
 		if (!message) return;
 		await runner(message, commit);
