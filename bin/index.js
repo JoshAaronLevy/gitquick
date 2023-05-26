@@ -24,4 +24,6 @@ program
 		}
 	});
 
+console.log('process.argv: ', process.argv);
+
 program.parse(process.argv);
