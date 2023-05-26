@@ -11,12 +11,13 @@ program
 		console.log('message: ', message);
 		const processArgs = process.argv.slice(2);
 		console.log('processArgs: ', processArgs);
+		if (processArgs.length > 1) {
+			message = processArgs.slice(0, processArgs.length).join(' ');
+		}
+		console.log('message: ', message);
 		try {
 			if (!message) message = await inputCommitMessage();
 			if (message) {
-				if (message[0] === '"' && (program.args && program.args.length > 1)) {
-					message = program.args.join(' ');
-				}
 				// console.log('program: ', program);
 				return await runner(message);
 			} else {
