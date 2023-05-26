@@ -5,7 +5,7 @@ const { inputCommitMessage } = require("../lib/prompt.js");
 
 program
 	.description("Example: gitquick \"I fixed a bug\"")
-	.option("-c, --commit-only", "Add (stage) and commit changes only. Will not push to remote repository")
+	.option("c, commit-only", "Add (stage) and commit changes only. Will not push to remote repository")
 	.version("1.2.2", "-v, --version")
 	.arguments("[message]")
 	.action(async (message, command) => {
