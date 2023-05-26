@@ -1,6 +1,6 @@
 {
 	"name": "gitquick",
-	"version": "4.3.7",
+	"version": "4.5.3",
 	"description": "Git Add, Commit, and Push on the Fly",
 	"repository": {
 		"url": "https://github.com/JoshAaronLevy/gitquick"
@@ -31,9 +31,11 @@
 	},
 	"dependencies": {
 		"chalk": "^2.4.2",
-		"commander": "^3.0.2",
+		"commander": "^10.0.1",
+		"enquirer": "^2.3.6",
 		"execa": "^2.1.0",
-		"ora": "^4.0.2"
+		"ora": "^4.0.2",
+		"yargs": "^17.7.2"
 	},
 	"devDependencies": {
 		"eslint": "^8.35.0"
