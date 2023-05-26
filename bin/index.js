@@ -1,20 +1,27 @@
 #!/usr/bin/env node
 const program = require("commander");
+// const program = new commander.Command();
 const runner = require("../lib/runner.js");
 const prompt = require("../lib/prompt.js");
+
+// program
+// 	.name("gitquick")
+// 	.description("CLI to add, commit and push changes to remote repository in one step")
+// 	.version("4.4.2");
 
 program
 	.description("Example: gitquick \"I fixed a bug\"")
 	.option("[message]")
-	.option("-c, --commit", "Commit changes only without pushing to remote repository", (commitFlag) => commitFlag)
-	.version("4.3.7", "-v, --version")
-	.action(async (message, command, commitFlag) => {
-		console.log("command: ", command);
-		console.log("commitFlag: ", commitFlag);
-		let commit;
-		(!command || (command && !command.commit)) ? commit = false : commit = true;
-		console.log("commit: ", commit);
-		process.argv.length > 2 ? message = message.trim() : message = await prompt.commitMessageInput();
+	.option("-c, --commit", "Commit changes only without pushing to remote repository", false)
+	.action(async (command, options) => {
+		let message;
+		// console.log("command: ", command);
+		console.log("options: ", options);
+		// console.log("commitFlag: ", commitFlag);
+		let commit = false;
+		// (!options || (options && !options.commit)) ? commit = false : commit = true;
+		// console.log("commit: ", commit);
+		command ? message = command.trim() : message = await prompt.commitMessageInput();
 		if (!message) return;
 		await runner(message, commit);
 	});
