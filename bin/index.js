@@ -14,7 +14,7 @@ program
 		console.log("process.argv: ", process.argv);
 		let commit;
 		(!command || (command && !command.commit)) ? commit = false : commit = true;
-		message ? message = message.trim() : message = await prompt.commitMessageInput();
+		process.argv.length > 2 ? message = message.trim() : message = await prompt.commitMessageInput();
 		if (!message) return;
 		await runner(message, commit);
 	});
