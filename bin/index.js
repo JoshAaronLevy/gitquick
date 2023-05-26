@@ -8,8 +8,9 @@ program
 	.option("[message]")
 	.option("-c, --commit-only", "Commit changes only. Skip pushing to remote repository")
 	.version("1.2.2", "-v, --version")
-	.action(async (message) => {
-		console.log(message);
+	.action(async (message, command) => {
+		console.log("message: ", message);
+		console.log("command: ", command);
 		if (message?.args?.length === 0) message = await inputCommitMessage();
 		return await runner(message);
 	});
