@@ -11,7 +11,7 @@ program
 	.action(async (message) => {
 		console.log("program: ", program);
 		console.log("message: ", message);
-		console.log("options: ", program.opts());
+		// console.log("options: ", program.opts());
 		if (program.opts().commitOnly) {
 			console.log("Commit only flag is set");
 		}
