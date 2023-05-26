@@ -9,9 +9,9 @@ program
 	.option("-c, --commit-only", "Commit changes only. Skip pushing to remote repository")
 	.version("1.2.2", "-v, --version")
 	.action(async (message) => {
-		console.log("program: ", program);
+		// console.log("program: ", program);
 		console.log("message: ", message);
-		// console.log("options: ", program.opts());
+		console.log("options: ", program.opts());
 		if (program.opts().commitOnly) {
 			console.log("Commit only flag is set");
 		}
