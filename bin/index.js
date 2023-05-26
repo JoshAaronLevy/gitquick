@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const program = require("commander");
 const runner = require("../lib/runner.js");
+const prompt = require("../lib/prompt.js");
 
 program
 	.description("Example: gitquick \"I fixed a bug\"")
@@ -8,12 +9,11 @@ program
 	.option("-c, --commit")
 	.version("4.3.7", "-v, --version")
 	.action(async (message, command) => {
-		let commit = command.commit;
-		if (!commit) {
-			commit = false;
-		} else {
-			commit = true;
-		}
+		console.log("message: ", message);
+		let commit;
+		(!command || (command && !command.commit)) ? commit = false : commit = true;
+		message ? message = message.trim() : message = await prompt.commitMessageInput();
+		if (!message) return;
 		await runner(message, commit);
 	});
 
