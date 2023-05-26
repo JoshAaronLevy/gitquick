@@ -5,18 +5,18 @@ const { inputCommitMessage } = require("../lib/prompt.js");
 
 program
 	.description("Example: gitquick \"I fixed a bug\"")
-	.option("c, commit-only", "Add (stage) and commit changes only. Will not push to remote repository")
+	.option("-c, --commit-only", "Commit changes only. Skip pushing to remote repository")
 	.version("1.2.2", "-v, --version")
 	.arguments("[message]")
-	.action(async (message, command) => {
+	.action(async (message) => {
 		console.log("message: ", message);
-		console.log("command: ", command);
-		if (command.commitOnly) {
+		console.log("options: ", program.opts());
+		if (program.opts().commitOnly) {
 			console.log("Commit only flag is set");
 		}
 		if (!message) message = await inputCommitMessage();
-		if (message, command) {
-			return await runner(message, command);
+		if (message) {
+			return await runner(message);
 		} else {
 			console.log("No message provided");
 		}
