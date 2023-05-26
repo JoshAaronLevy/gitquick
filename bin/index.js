@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const { Command } = require("commander");
-const program = new Command();
+const commander = require("commander");
+const program = new commander.Command();
 const runner = require("../lib/runner.js");
 const prompt = require("../lib/prompt.js");
 
@@ -30,3 +30,6 @@ program
 	});
 
 program.parse(process.argv);
+
+const options = program.opts();
+console.log("options: ", options);
