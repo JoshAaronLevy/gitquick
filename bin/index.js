@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const program = require('commander');
 const runner = require('../lib/runner.js');
-const { inputCommitMessage } = require('../lib/prompt.js');
+const { promptCommitMessage } = require('../lib/prompt.js');
 
 program
 	.description('Example: gitquick "I fixed a bug"')
@@ -13,7 +13,7 @@ program
 			message = processArgs.slice(0, processArgs.length).join(' ');
 		}
 		try {
-			if (!message) message = await inputCommitMessage();
+			if (!message) message = await promptCommitMessage();
 			if (message) {
 				return await runner(message);
 			} else {
