@@ -1,41 +1,41 @@
 {
-    "env": {
-        "commonjs": true,
-        "es2021": true,
-        "node": true,
-        "jest": true
-    },
-    "plugins": [
-        "jest"
-    ],
-    "extends": ["eslint:recommended", "plugin:jest/recommended"],
-    "overrides": [
-    ],
-    "parserOptions": {
-        "ecmaVersion": "latest"
-    },
-    "rules": {
-        "indent": [
-            "error",
-            "tab"
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ]
-    },
-    "ignorePatterns": [
-        "node_modules/",
-        "assets/",
-        ".github/",
-        ".vscode/"
-    ]
+	"env": {
+		"commonjs": true,
+		"es2021": true,
+		"node": true,
+		"jest": true
+	},
+	"plugins": [
+		"jest"
+	],
+	"extends": ["eslint:recommended", "plugin:jest/recommended"],
+	"overrides": [
+	],
+	"parserOptions": {
+		"ecmaVersion": "latest"
+	},
+	"rules": {
+		"indent": [
+			"error",
+			"tab"
+		],
+		"linebreak-style": [
+			"error",
+			"unix"
+		],
+		"quotes": [
+			"error",
+			"single"
+		],
+		"semi": [
+			"error",
+			"always"
+		]
+	},
+	"ignorePatterns": [
+		"node_modules/",
+		"assets/",
+		".github/",
+		".vscode/"
+	]
 }
