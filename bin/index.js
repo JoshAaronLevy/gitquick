@@ -6,7 +6,7 @@ const { promptCommitMessage } = require('../lib/prompt.js');
 program
 	.description('Example: gitquick "I fixed a bug"')
 	.argument('[message]')
-	.version('4.6.4', '-v, --version')
+	.version('4.7.4', '-v, --version')
 	.action(async (message) => {
 		const processArgs = process.argv.slice(2);
 		if (processArgs.length > 1) {
