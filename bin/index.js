@@ -2,11 +2,12 @@
 const program = require('commander');
 const runner = require('../lib/runner.js');
 const { promptCommitMessage } = require('../lib/prompt.js');
+const { version } = require('../package.json');
 
 program
 	.description('Example: gitquick "I fixed a bug"')
 	.argument('[message]')
-	.version('4.7.4', '-v, --version')
+	.version(version, '-v, --version')
 	.action(async (message) => {
 		const processArgs = process.argv.slice(2);
 		if (processArgs.length > 1) {
