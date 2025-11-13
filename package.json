@@ -1,6 +1,6 @@
 {
 	"name": "gitquick",
-	"version": "5.1.0",
+	"version": "5.1.1",
 	"description": "Git Add, Commit, and Push on the Fly",
 	"repository": {
 		"url": "https://github.com/JoshAaronLevy/gitquick"
@@ -38,6 +38,11 @@
 	"bin": {
 		"gitquick": "./dist/bin/index.js"
 	},
+	"files": [
+		"dist",
+		"README.md",
+		"CHANGELOG.md"
+	],
 	"dependencies": {
 		"colorette": "^2.0.20",
 		"commander": "^10.0.1",
