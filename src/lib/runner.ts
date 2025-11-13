@@ -246,8 +246,8 @@ const analyzeChanges = async (): Promise<FileChanges> => {
 		for (const line of statusLines) {
 			if (line.length < 3) continue;
 			
-			const status = line.substring(0, 2).trim();
-			const filePath = line.substring(3);
+			const status = line.substring(0, 2);
+			const filePath = line.substring(2).trim();
 			
 			// Handle different status codes
 			if (status.includes('A')) {
@@ -326,6 +326,7 @@ const stageChanges = async (changeCount: number): Promise<void> => {
 	const spinner = createSpinner('Adding file(s)...').start();
 	
 	try {
+		// Staging files
 		await commands.stageFiles();
 		
 		const fileWord: string = changeCount === 1 ? CHANGE_MESSAGES.SINGLE_FILE : CHANGE_MESSAGES.MULTIPLE_FILES;
