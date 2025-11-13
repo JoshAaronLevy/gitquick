@@ -65,6 +65,11 @@ const getStatus = async (): Promise<CommandResult> => {
 	return result;
 };
 
+const getStatusShort = async (): Promise<CommandResult> => {
+	const result: CommandResult = execGitCommand('git status --short');
+	return result;
+};
+
 const stageFiles = async (): Promise<CommandResult> => {
 	const result: CommandResult = execGitCommand('git add -A');
 	if (result.code !== 0) {
@@ -108,6 +113,7 @@ export const commands = {
   getBranch,
   getRemoteUrl,
   getStatus,
+  getStatusShort,
   stageFiles,
   commitChanges,
   pushChanges,
