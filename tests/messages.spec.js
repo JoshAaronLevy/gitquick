@@ -1,5 +1,5 @@
-const { red, yellow, green, white, bold } = require('colorette');
-const { logs } = require('../lib/messages');
+import { red, yellow, green, white, bold } from 'colorette';
+import { logs } from '../lib/messages.js';
 
 describe('Logging functions', () => {
 	test('gitRemoteError returns expected string', () => {

@@ -1,7 +1,10 @@
 #!/usr/bin/env node
-const program = require('commander');
-const runner = require('../lib/runner.js');
-const { promptCommitMessage } = require('../lib/prompt.js');
+import { program } from 'commander';
+import runGitQuick, { setDebugMode } from '../lib/runner.js';
+import { promptCommitMessage } from '../lib/prompt.js';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 const { version } = require('../package.json');
 
 program
@@ -13,7 +16,7 @@ program
 	.action(async (message, options) => {
 		// Enable debug mode if flag is set
 		if (options.debug || options.verbose) {
-			runner.setDebugMode(true);
+			setDebugMode(true);
 		}
 
 		// Handle multi-word messages without quotes
@@ -28,7 +31,7 @@ program
 		try {
 			if (!message) message = await promptCommitMessage();
 			if (message) {
-				return await runner(message);
+				return await runGitQuick(message);
 			} else {
 				console.log('Unable to initiate commit process. Please try again.');
 				process.exit(1);
