@@ -186,28 +186,85 @@ tests/messages.spec.js - Jest tests for message formatting
 
 ---
 
-### **Stage 4: Dependency Updates (High Risk - Breaking)**
-**Goal:** Update to modern dependency versions
+### **Stage 4: Package Migration to ESM-Compatible Alternatives (Medium Risk)**
+**Goal:** Replace non-ESM packages with ESM-compatible alternatives to prepare for full ESM migration
 
-⚠️ **NOTE:** This stage requires migrating to ESM modules, which is a breaking change
+⚠️ **NOTE:** This stage replaces packages but keeps CommonJS syntax (require/module.exports)
 
-- [ ] Update `chalk` to v5.x (requires ESM)
-- [ ] Update `execa` to v9.x (requires ESM)
-- [ ] Update `ora` to v8.x (requires ESM)
-- [ ] Update `enquirer` to v2.4.1
-- [ ] Convert project to ESM (`"type": "module"` in package.json)
-- [ ] Update all imports/exports to ESM syntax
-- [ ] Update tests for ESM compatibility
+**Package Replacements:**
+- [ ] Replace `chalk` (v2.4.2) with `colorette` (v2.0.20)
+  - ESM-compatible, lightweight alternative
+  - Update all color/styling code
+- [ ] Replace `execa` (v2.1.0) with `shelljs` (v0.9.2)
+  - Synchronous command execution
+  - Update all git command wrappers
+- [ ] Replace `ora` (v4.0.2) with `nanospinner` (v1.2.2)
+  - ESM-compatible spinner with similar API
+  - Update all spinner usage
 
-**Estimated Time:** 2-4 hours  
-**Risk Level:** High  
-**Breaking Changes:** Yes (Node.js version requirements will increase)
+**Code Changes Required:**
+- [ ] Update `lib/messages.js` - Replace chalk with colorette
+- [ ] Update `lib/commands.js` - Replace execa with shelljs
+- [ ] Update `lib/runner.js` - Replace ora with nanospinner, chalk with colorette
+- [ ] Update `lib/prompt.js` - Replace ora with nanospinner, chalk with colorette
+- [ ] Update `tests/messages.spec.js` - Update tests for colorette
+- [ ] Update `package.json` dependencies
+- [ ] Run `npm install` to install new packages
 
-**Alternative Approach:** Stay on current major versions and only apply security patches
+**API Changes:**
+- `chalk.red.bold()` → `red(bold())`
+- `ora('message').start()` → `createSpinner('message').start()`
+- `spinner.succeed()` → `spinner.success({ text: 'message' })`
+- `spinner.fail()` → `spinner.error({ text: 'message' })`
+- `spinner.warn()` → `spinner.warn({ text: 'message' })`
+- `execa('git', ['cmd'])` → `shell.exec('git cmd')`
+
+**Estimated Time:** 2-3 hours  
+**Risk Level:** Medium  
+**Breaking Changes:** None (internal package changes only)
+
+**Benefits:**
+- Prepares codebase for ESM migration
+- Lighter dependencies (colorette is much smaller than chalk)
+- shelljs provides simpler, synchronous API
+- All packages are ESM-ready for Stage 5
 
 ---
 
-### **Stage 5: TypeScript Migration (High Risk - Breaking)**
+### **Stage 5: Full ESM Migration (High Risk - Breaking)**
+**Goal:** Convert entire project to ESM (ES Modules)
+
+⚠️ **NOTE:** This stage converts the project from CommonJS to ESM syntax
+
+- [ ] Add `"type": "module"` to package.json
+- [ ] Convert all `require()` to `import` statements
+- [ ] Convert all `module.exports` to `export` statements
+- [ ] Update file extensions or use .mjs if needed
+- [ ] Update Jest configuration for ESM support
+- [ ] Update all imports to include file extensions (.js)
+- [ ] Update dynamic imports where needed
+- [ ] Set minimum Node.js version to 14+
+- [ ] Test all functionality with ESM
+
+**Estimated Time:** 2-3 hours  
+**Risk Level:** High  
+**Breaking Changes:** Yes (Node.js 14+ required, ESM syntax)
+
+**Benefits:**
+- Modern JavaScript module system
+- Better tree-shaking and bundle optimization
+- Industry standard for new Node.js projects
+- Required for latest versions of many packages
+
+**Considerations:**
+- All packages already ESM-compatible from Stage 4
+- Requires updating package.json "exports" and "type" fields
+- May require updating CI/CD pipelines
+- Users need Node.js 14+ to run the tool
+
+---
+
+### **Stage 6: TypeScript Migration (High Risk - Breaking)**
 **Goal:** Convert codebase to TypeScript for better type safety and developer experience
 
 ⚠️ **NOTE:** This is a major refactor that changes the entire codebase structure
@@ -226,7 +283,6 @@ tests/messages.spec.js - Jest tests for message formatting
   - Commit context (branch, message, remote)
   - Command results
 - [ ] Add proper return types to all functions
-- [ ] Replace `require()` with `import` statements
 - [ ] Update `package.json` scripts for TypeScript compilation
 - [ ] Add `build` script to compile TypeScript to JavaScript
 - [ ] Update main entry point to compiled JavaScript
@@ -249,11 +305,11 @@ tests/messages.spec.js - Jest tests for message formatting
 - Adds build/compilation step to development workflow
 - Increases project complexity slightly
 - May require updating CI/CD pipelines
-- Should be done after Stage 4 (ESM migration) for best compatibility
+- Should be done after Stage 5 (ESM migration) for best compatibility
 
 ---
 
-### **Stage 6: Modern Features (Optional)**
+### **Stage 7: Modern Features (Optional)**
 **Goal:** Add new capabilities and improve developer experience
 
 - [ ] Add JSDoc type annotations throughout
@@ -280,10 +336,11 @@ tests/messages.spec.js - Jest tests for message formatting
 ### Medium-Term
 3. **Stage 3** - Better error handling and validation
 
-### Long-Term Considerations
-4. **Stage 4** - Only if you want to use latest dependencies (requires ESM migration)
-5. **Stage 5** - TypeScript migration for type safety and better DX (do after Stage 4)
-6. **Stage 6** - Based on user feedback and feature requests
+### Long-Term Considerations (ESM & TypeScript Path)
+4. **Stage 4** - Replace packages with ESM-compatible alternatives (prepares for ESM)
+5. **Stage 5** - Full ESM migration (converts require/module.exports to import/export)
+6. **Stage 6** - TypeScript migration for type safety and better DX (do after Stage 5)
+7. **Stage 7** - Based on user feedback and feature requests
 
 ### Notes on ESM Migration
 The major blocker for updating dependencies is that modern versions of `chalk`, `execa`, and `ora` are ESM-only. This requires:
@@ -303,9 +360,10 @@ The major blocker for updating dependencies is that modern versions of `chalk`, 
 | Stage 1 | Low | High | 🔴 Critical |
 | Stage 2 | Medium | High | 🟡 High |
 | Stage 3 | Medium | High | 🟡 High |
-| Stage 4 | High | Medium | 🔵 Optional |
+| Stage 4 | Medium | High | 🔵 Optional |
 | Stage 5 | High | High | 🔵 Optional |
-| Stage 6 | Low-Medium | Medium | 🔵 Optional |
+| Stage 6 | High | High | 🔵 Optional |
+| Stage 7 | Low-Medium | Medium | 🔵 Optional |
 
 ---
 

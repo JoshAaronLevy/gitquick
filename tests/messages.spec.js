@@ -1,32 +1,32 @@
-const chalk = require('chalk');
+const { red, yellow, green, white, bold } = require('colorette');
 const { logs } = require('../lib/messages');
 
 describe('Logging functions', () => {
 	test('gitRemoteError returns expected string', () => {
 		const error = 'Error Message';
 		expect(logs.gitRemoteError(error)).toBe(
-			chalk.red.bold('ERROR! ') + chalk.white('Unable to find git remote URL:\n') + chalk.red.bold(error)
+			red(bold('ERROR! ')) + white('Unable to find git remote URL:\n') + red(bold(error))
 		);
 	});
 
 	test('gitRemoteWarning returns expected string', () => {
 		const warning = 'Warning Message';
 		expect(logs.gitRemoteWarning(warning)).toBe(
-			chalk.yellow.bold('WARNING! ') + chalk.white('Unable to identify git remote URL\n') + chalk.red.bold(warning)
+			yellow(bold('WARNING! ')) + white('Unable to identify git remote URL\n') + red(bold(warning))
 		);
 	});
 
 	test('gitAddError returns expected string', () => {
 		const error = 'Error Message';
 		expect(logs.gitAddError(error)).toBe(
-			chalk.red.bold('ERROR! ') + chalk.white('Could not stage changes. See details below:\n') + chalk.red.bold(error)
+			red(bold('ERROR! ')) + white('Could not stage changes. See details below:\n') + red(bold(error))
 		);
 	});
 
 	test('pushingUpstream returns expected string', () => {
 		const branch = 'master';
 		expect(logs.pushingUpstream(branch)).toBe(
-			chalk.yellow.bold('ALERT! ') + chalk.white(`${branch} branch does not exist in remote repository yet.`)
+			yellow(bold('ALERT! ')) + white(`${branch} branch does not exist in remote repository yet.`)
 		);
 	});
 
@@ -35,25 +35,25 @@ describe('Logging functions', () => {
 		const branch = 'master';
 		const url = 'http://github.com/repo.git';
 		expect(logs.pushSuccess(message, branch, url)).toBe(
-			chalk.white('Code changes pushed\n') +
-			chalk.green.bold('Summary:\n') +
-			chalk.white.bold('Commit Message: ') + chalk.white(`'${message}'\n`) +
-			chalk.white.bold('Branch Name: ') + chalk.white(`${branch}\n`) +
-			chalk.white.bold('Git Remote URL: ') + chalk.white(`${url}`)
+			white('Code changes pushed\n') +
+			green(bold('Summary:\n')) +
+			bold(white('Commit Message: ')) + white(`'${message}'\n`) +
+			bold(white('Branch Name: ')) + white(`${branch}\n`) +
+			bold(white('Git Remote URL: ')) + white(`${url}`)
 		);
 	});
 
 	test('pushError returns expected string', () => {
 		const error = { all: 'Error Message' };
 		expect(logs.pushError(error)).toBe(
-			chalk.red.bold('ERROR! ') + chalk.white('Could not push to remote repository. See details below:\n' + `${error.all}`)
+			red(bold('ERROR! ')) + white('Could not push to remote repository. See details below:\n' + `${error.all}`)
 		);
 	});
 
 	test('pushUpstreamError returns expected string', () => {
 		const error = 'Error Message';
 		expect(logs.pushUpstreamError(error)).toBe(
-			chalk.red.bold('ERROR!') + chalk.white(' Could not push to remote repository via --set-upstream. See details below:\n' + `${error}`)
+			red(bold('ERROR!')) + white(' Could not push to remote repository via --set-upstream. See details below:\n' + `${error}`)
 		);
 	});
 });
