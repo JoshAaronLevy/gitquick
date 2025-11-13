@@ -4,35 +4,39 @@ import { red, yellow, white, bold, dim } from 'colorette';
 import { validateCommitMessage } from './validation.js';
 import { ValidationError } from './errors.js';
 
+interface PromptResponse {
+	commitMessage: string;
+}
+
 /**
  * Prompt user for commit message with validation
- * @returns {Promise<string|null>} Validated commit message or null if cancelled/invalid
+ * @returns Validated commit message or null if cancelled/invalid
  */
-const promptCommitMessage = async () => {
+const promptCommitMessage = async (): Promise<string | null> => {
 	try {
 		const enquirer = new Enquirer();
 		const response = await enquirer.prompt({
 			type: 'input',
 			name: 'commitMessage',
 			message: 'Enter commit message (max 72 chars)'
-		});
+		}) as PromptResponse;
 		return await inputCommitMessage(response.commitMessage);
-	} catch (error) {
+	} catch (error: any) {
 		return commitError(error);
 	}
 };
 
 /**
  * Validate and return commit message
- * @param {string} message - User input commit message
- * @returns {Promise<string|null>} Validated message or null if invalid
+ * @param message - User input commit message
+ * @returns Validated message or null if invalid
  */
-const inputCommitMessage = async (message) => {
+const inputCommitMessage = async (message: string): Promise<string | null> => {
 	try {
 		// Validate the commit message
-		const validatedMessage = validateCommitMessage(message);
+		const validatedMessage: string = validateCommitMessage(message);
 		return validatedMessage;
-	} catch (error) {
+	} catch (error: any) {
 		if (error instanceof ValidationError) {
 			return invalidCommitMsg(error.message, error.suggestion);
 		}
@@ -42,11 +46,11 @@ const inputCommitMessage = async (message) => {
 
 /**
  * Display invalid commit message warning
- * @param {string} message - Error message
- * @param {string} suggestion - Helpful suggestion
- * @returns {null}
+ * @param message - Error message
+ * @param suggestion - Helpful suggestion
+ * @returns null
  */
-const invalidCommitMsg = (message, suggestion) => {
+const invalidCommitMsg = (message: string, suggestion: string): null => {
 	const spinner = createSpinner().start();
 	spinner.warn({
 		text: yellow(bold('ALERT! ')) + 
@@ -58,10 +62,10 @@ const invalidCommitMsg = (message, suggestion) => {
 
 /**
  * Display commit error
- * @param {Error} error - Error object
- * @returns {null}
+ * @param error - Error object
+ * @returns null
  */
-const commitError = (error) => {
+const commitError = (error: any): null => {
 	const spinner = createSpinner().start();
 	spinner.error({ text: red(bold('ERROR! ')) + white(`${error.message || error}`) });
 	return null;

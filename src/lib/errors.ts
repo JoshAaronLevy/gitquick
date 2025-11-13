@@ -6,7 +6,9 @@
  * Base error class for gitquick errors
  */
 export class GitQuickError extends Error {
-	constructor(message, suggestion = '') {
+	suggestion: string;
+
+	constructor(message: string, suggestion: string = '') {
 		super(message);
 		this.name = 'GitQuickError';
 		this.suggestion = suggestion;
@@ -18,7 +20,7 @@ export class GitQuickError extends Error {
  * Error thrown when validation fails
  */
 export class ValidationError extends GitQuickError {
-	constructor(message, suggestion = '') {
+	constructor(message: string, suggestion: string = '') {
 		super(message, suggestion);
 		this.name = 'ValidationError';
 	}
@@ -28,7 +30,7 @@ export class ValidationError extends GitQuickError {
  * Error thrown when git repository is not found or not initialized
  */
 export class GitRepositoryError extends GitQuickError {
-	constructor(message = 'Not a git repository', suggestion = 'Run "git init" to initialize a repository or navigate to an existing repository.') {
+	constructor(message: string = 'Not a git repository', suggestion: string = 'Run "git init" to initialize a repository or navigate to an existing repository.') {
 		super(message, suggestion);
 		this.name = 'GitRepositoryError';
 	}
@@ -38,7 +40,7 @@ export class GitRepositoryError extends GitQuickError {
  * Error thrown when git is not installed or not found
  */
 export class GitNotFoundError extends GitQuickError {
-	constructor(message = 'Git is not installed or not found in PATH', suggestion = 'Install git from https://git-scm.com/downloads') {
+	constructor(message: string = 'Git is not installed or not found in PATH', suggestion: string = 'Install git from https://git-scm.com/downloads') {
 		super(message, suggestion);
 		this.name = 'GitNotFoundError';
 	}
@@ -48,7 +50,9 @@ export class GitNotFoundError extends GitQuickError {
  * Error thrown when git command execution fails
  */
 export class GitCommandError extends GitQuickError {
-	constructor(message, suggestion = '', originalError = null) {
+	originalError: Error | null;
+
+	constructor(message: string, suggestion: string = '', originalError: Error | null = null) {
 		super(message, suggestion);
 		this.name = 'GitCommandError';
 		this.originalError = originalError;

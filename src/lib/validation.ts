@@ -7,11 +7,11 @@ import { ValidationError } from './errors.js';
 
 /**
  * Validate commit message
- * @param {string} message - Commit message to validate
+ * @param message - Commit message to validate
  * @throws {ValidationError} If validation fails
- * @returns {string} Trimmed and validated message
+ * @returns Trimmed and validated message
  */
-export const validateCommitMessage = (message) => {
+export const validateCommitMessage = (message: string): string => {
 	if (!message || typeof message !== 'string') {
 		throw new ValidationError(
 			ERROR_MESSAGES.EMPTY_COMMIT_MESSAGE,
@@ -19,7 +19,7 @@ export const validateCommitMessage = (message) => {
 		);
 	}
 
-	const trimmedMessage = message.trim();
+	const trimmedMessage: string = message.trim();
 
 	if (trimmedMessage.length === 0) {
 		throw new ValidationError(
@@ -36,7 +36,7 @@ export const validateCommitMessage = (message) => {
 	}
 
 	// Check first line length (split on newline for multi-line messages)
-	const firstLine = trimmedMessage.split('\n')[0];
+	const firstLine: string = trimmedMessage.split('\n')[0];
 	if (firstLine.length > VALIDATION.COMMIT_MESSAGE_MAX_LENGTH) {
 		throw new ValidationError(
 			ERROR_MESSAGES.COMMIT_MESSAGE_TOO_LONG,
