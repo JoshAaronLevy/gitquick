@@ -17,7 +17,8 @@ import {
 } from './errors.js';
 import { createSpinner } from 'nanospinner';
 import { red, yellow, green, white, bold, dim } from 'colorette';
-import { GitContext } from './types.js';
+import { GitContext, FileChanges } from './types.js';
+import { promptConfirmation } from './prompt.js';
 
 // Global debug flag
 let debugMode: boolean = false;
@@ -200,52 +201,121 @@ const parseOriginUrl = async (rawRemoteUrl: string): Promise<string> => {
  * @param context - Context object containing remoteUrl and currentBranch
  */
 const executeGitWorkflow = async (message: string, context: GitContext): Promise<void> => {
-	const changeCount: number = await analyzeChanges();
+	const changes: FileChanges = await analyzeChanges();
 	
-	if (changeCount === 0) {
+	if (changes.totalCount === 0) {
 		return;
 	}
 	
-	await stageChanges(changeCount);
+	// Display visual breakdown of changes
+	displayChangesBreakdown(changes);
+	
+	// Ask for user confirmation
+	const confirmed: boolean = await promptConfirmation();
+	
+	if (!confirmed) {
+		console.log(yellow('\n⚠ Process aborted by user. No changes were staged or committed.\n'));
+		return;
+	}
+	
+	await stageChanges(changes.totalCount);
 	await commitChanges(message);
 	await pushToRemote(message, context);
 };
 
 /**
- * Analyze git status and count changed files
- * @returns Number of changed files
+ * Analyze git status and categorize changed files
+ * @returns FileChanges object with categorized files
  */
-const analyzeChanges = async (): Promise<number> => {
+const analyzeChanges = async (): Promise<FileChanges> => {
 	const spinner = createSpinner('Gathering file changes...').start();
 	
 	try {
-		const result = await commands.getStatus();
-		const statusLines: string[] = result.stdout.split('\n');
+		const result = await commands.getStatusShort();
+		const statusLines: string[] = result.stdout.split('\n').filter(line => line.trim() !== '');
 		
-		// Filter and parse changed files
-		const changedFiles: string[] = statusLines
-			.filter(line => line.includes(GIT_STATUS_PATTERNS.TAB_CHARACTER))
-			.map(line => {
-				if (line.includes(GIT_STATUS_PATTERNS.MODIFIED_PREFIX)) {
-					return line.slice(12).trim();
-				}
-				return line.slice(1).trim();
-			});
+		const changes: FileChanges = {
+			added: [],
+			modified: [],
+			deleted: [],
+			renamed: [],
+			totalCount: 0
+		};
 		
-		// Remove duplicates
-		const uniqueFiles: string[] = [...new Set(changedFiles)];
+		// Parse git status --short output
+		for (const line of statusLines) {
+			if (line.length < 3) continue;
+			
+			const status = line.substring(0, 2).trim();
+			const filePath = line.substring(3);
+			
+			// Handle different status codes
+			if (status.includes('A')) {
+				changes.added.push(filePath);
+			} else if (status.includes('M')) {
+				changes.modified.push(filePath);
+			} else if (status.includes('D')) {
+				changes.deleted.push(filePath);
+			} else if (status.includes('R')) {
+				changes.renamed.push(filePath);
+			} else if (status === '??') {
+				// Untracked files
+				changes.added.push(filePath);
+			}
+		}
 		
-		if (uniqueFiles.length === 0) {
+		changes.totalCount = changes.added.length + changes.modified.length + 
+		                     changes.deleted.length + changes.renamed.length;
+		
+		if (changes.totalCount === 0) {
 			spinner.warn({ text: yellow(bold('ALERT! ')) + white('No file change(s) found') });
-			return 0;
+			return changes;
 		}
 		
 		spinner.success();
-		return uniqueFiles.length;
+		return changes;
 	} catch (error: any) {
 		spinner.warn({ text: yellow(bold('ALERT! ')) + white('Process aborted') });
-		return 0;
+		return {
+			added: [],
+			modified: [],
+			deleted: [],
+			renamed: [],
+			totalCount: 0
+		};
 	}
+};
+
+/**
+ * Display a visual breakdown of file changes
+ * @param changes - FileChanges object with categorized files
+ */
+const displayChangesBreakdown = (changes: FileChanges): void => {
+	console.log('\n' + bold('📋 Changes Summary:'));
+	console.log(dim('─'.repeat(50)));
+	
+	if (changes.added.length > 0) {
+		console.log(green(bold(`\n✓ Added (${changes.added.length}):`)));
+		changes.added.forEach(file => console.log(green(`  + ${file}`)));
+	}
+	
+	if (changes.modified.length > 0) {
+		console.log(yellow(bold(`\n⚡ Modified (${changes.modified.length}):`)));
+		changes.modified.forEach(file => console.log(yellow(`  ~ ${file}`)));
+	}
+	
+	if (changes.deleted.length > 0) {
+		console.log(red(bold(`\n✗ Deleted (${changes.deleted.length}):`)));
+		changes.deleted.forEach(file => console.log(red(`  - ${file}`)));
+	}
+	
+	if (changes.renamed.length > 0) {
+		console.log(white(bold(`\n↻ Renamed (${changes.renamed.length}):`)));
+		changes.renamed.forEach(file => console.log(white(`  ↻ ${file}`)));
+	}
+	
+	console.log(dim('\n' + '─'.repeat(50)));
+	console.log(bold(`Total: ${changes.totalCount} file${changes.totalCount === 1 ? '' : 's'}\n`));
 };
 
 /**

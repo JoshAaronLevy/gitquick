@@ -8,6 +8,10 @@ interface PromptResponse {
 	commitMessage: string;
 }
 
+interface ConfirmResponse {
+	proceed: boolean;
+}
+
 /**
  * Prompt user for commit message with validation
  * @returns Validated commit message or null if cancelled/invalid
@@ -71,4 +75,25 @@ const commitError = (error: any): null => {
 	return null;
 };
 
-export { promptCommitMessage };
+/**
+ * Prompt user to confirm proceeding with changes
+ * @returns true if user confirms, false otherwise
+ */
+const promptConfirmation = async (): Promise<boolean> => {
+	try {
+		const enquirer = new Enquirer();
+		const response = await enquirer.prompt({
+			type: 'select',
+			name: 'proceed',
+			message: 'Do you want to proceed with these changes?',
+			choices: ['Yes', 'No']
+		}) as { proceed: string };
+		
+		return response.proceed === 'Yes';
+	} catch (error: any) {
+		// User cancelled (Ctrl+C) or error occurred
+		return false;
+	}
+};
+
+export { promptCommitMessage, promptConfirmation };

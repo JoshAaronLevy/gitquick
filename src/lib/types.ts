@@ -27,3 +27,11 @@ export interface ErrorMessages {
 	GIT_NOT_FOUND: string;
 	NO_CHANGES: string;
 }
+
+export interface FileChanges {
+	added: string[];
+	modified: string[];
+	deleted: string[];
+	renamed: string[];
+	totalCount: number;
+}
