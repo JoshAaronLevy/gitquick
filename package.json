@@ -8,6 +8,7 @@
 	"main": "./bin/index.js",
 	"scripts": {
 		"start": "node ./bin/index.js",
+		"relink": "npm uninstall -g gitquick && rm -rf package-lock.json && npm install && npm link && echo 'Now running gitquick version:' && gitquick -v",
 		"test": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage --verbose",
 		"deploy": "git add -A && git commit -m 'Updated version and publishing' && git push && npm publish",
 		"lint": "eslint .",
