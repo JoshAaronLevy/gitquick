@@ -329,7 +329,7 @@ const stageChanges = async (changeCount: number): Promise<void> => {
 		await commands.stageFiles();
 		
 		const fileWord: string = changeCount === 1 ? CHANGE_MESSAGES.SINGLE_FILE : CHANGE_MESSAGES.MULTIPLE_FILES;
-		const stageMessage: string = `${changeCount} ${fileWord} committed`;
+		const stageMessage: string = `${changeCount} ${fileWord} successfully staged`;
 		
 		spinner.success({ text: white(stageMessage) });
 	} catch (error: any) {
