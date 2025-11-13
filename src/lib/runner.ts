@@ -326,7 +326,6 @@ const stageChanges = async (changeCount: number): Promise<void> => {
 	const spinner = createSpinner('Adding file(s)...').start();
 	
 	try {
-		// Staging files
 		await commands.stageFiles();
 		
 		const fileWord: string = changeCount === 1 ? CHANGE_MESSAGES.SINGLE_FILE : CHANGE_MESSAGES.MULTIPLE_FILES;
