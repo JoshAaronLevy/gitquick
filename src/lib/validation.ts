@@ -6,6 +6,23 @@ import { VALIDATION, ERROR_MESSAGES } from './constants.js';
 import { ValidationError } from './errors.js';
 
 /**
+ * Check if commit message exceeds maximum length without throwing
+ * @param message - Commit message to check
+ * @returns Object with isValid flag and trimmed message
+ */
+export const checkCommitMessageLength = (message: string): { isValid: boolean; message: string; firstLine: string } => {
+	const trimmedMessage: string = message.trim();
+	const firstLine: string = trimmedMessage.split('\n')[0];
+	const isValid: boolean = firstLine.length <= VALIDATION.COMMIT_MESSAGE_MAX_LENGTH;
+	
+	return {
+		isValid,
+		message: trimmedMessage,
+		firstLine
+	};
+};
+
+/**
  * Validate commit message
  * @param message - Commit message to validate
  * @throws {ValidationError} If validation fails
