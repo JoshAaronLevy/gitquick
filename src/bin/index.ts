@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { program } from 'commander';
 import runGitQuick, { setDebugMode } from '../lib/runner.js';
-import { promptCommitMessage } from '../lib/prompt.js';
+import { promptCommitMessage, promptLongCommitMessage } from '../lib/prompt.js';
+import { checkCommitMessageLength } from '../lib/validation.js';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
@@ -34,8 +35,26 @@ program
 		}
 
 		try {
-			if (!message) message = await promptCommitMessage() || undefined;
+			// If no message provided, prompt for one
+			if (!message) {
+				message = await promptCommitMessage() || undefined;
+			}
+			
+			// Check if message exceeds length limit
 			if (message) {
+				const lengthCheck = checkCommitMessageLength(message);
+				
+				// If message is too long, prompt user to shorten or keep original
+				if (!lengthCheck.isValid) {
+					const newMessage = await promptLongCommitMessage(message);
+					if (newMessage) {
+						message = newMessage;
+					} else {
+						console.log('Unable to initiate commit process. Please try again.');
+						process.exit(1);
+					}
+				}
+				
 				return await runGitQuick(message);
 			} else {
 				console.log('Unable to initiate commit process. Please try again.');
