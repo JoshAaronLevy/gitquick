@@ -13,7 +13,7 @@
 		"dev": "tsc --watch",
 		"relink": "npm uninstall -g gitquick && rm -rf package-lock.json && npm install && rm -rf dist && npm run build && npm link && echo 'Now running gitquick version:' && gitquick -v",
 		"test": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage --verbose",
-		"deploy": "rm -rf package-lock.json && npm install && rm -rf dist && npm run build && git add -A && git commit -m 'Updated version and publishing' && git push && npm publish",
+		"deploy": "rm -rf package-lock.json && npm install && rm -rf dist && npm run build && npm publish && git add -A && git commit -m 'Updated version and publishing' && git push",
 		"lint": "eslint src/",
 		"lint:fix": "eslint src/ --fix"
 	},
