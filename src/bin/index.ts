@@ -11,6 +11,7 @@ const { version }: { version: string } = require('../../package.json');
 interface ProgramOptions {
 	debug?: boolean;
 	verbose?: boolean;
+	target?: string;
 }
 
 program
@@ -18,6 +19,7 @@ program
 	.argument('[message]', 'Commit message')
 	.option('-d, --debug', 'Enable debug mode with verbose output')
 	.option('--verbose', 'Enable verbose output (alias for --debug)')
+	.option('--target <branch>', 'Sync current branch with the specified target branch before pushing')
 	.version(version, '-v, --version')
 	.action(async (message: string | undefined, options: ProgramOptions) => {
 		// Enable debug mode if flag is set
@@ -55,7 +57,7 @@ program
 					}
 				}
 				
-				return await runGitQuick(message);
+				return await runGitQuick(message, { targetBranch: options.target });
 			} else {
 				console.log('Unable to initiate commit process. Please try again.');
 				process.exit(1);

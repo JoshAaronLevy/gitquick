@@ -36,6 +36,16 @@ export const pushUpstreamError = (error: string): string =>
 		`${error}`
 	);
 
+export const targetSyncSuccess = (targetBranch: string): string =>
+	green(bold('Target branch sync complete: ')) + white(`Current branch now contains latest ${targetBranch} changes.`);
+
+export const targetSyncError = (targetBranch: string, error: string): string =>
+	red(bold('ERROR! ')) +
+	white(
+		`Failed to sync with target branch ${targetBranch}. See details below:\n` +
+		`${error}`
+	);
+
 export const logs = {
 	gitRemoteError,
 	gitRemoteWarning,
@@ -43,5 +53,7 @@ export const logs = {
 	pushingUpstream,
 	pushSuccess,
 	pushError,
-	pushUpstreamError
+	pushUpstreamError,
+	targetSyncSuccess,
+	targetSyncError
 };

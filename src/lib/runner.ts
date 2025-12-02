@@ -15,7 +15,7 @@ import {
 } from './errors.js';
 import { createSpinner } from 'nanospinner';
 import { red, yellow, green, white, bold, dim } from 'colorette';
-import { GitContext, FileChanges, PushResolutionAction, PushFailureScenario } from './types.js';
+import { GitContext, FileChanges, PushResolutionAction, PushFailureScenario, RunOptions } from './types.js';
 import { promptConfirmation, promptPushResolution } from './prompt.js';
 import { determinePushFailureScenario } from './push-resolution.js';
 
@@ -86,7 +86,7 @@ const handleError = (error: any): void => {
  * Main entry point - executes the complete git workflow
  * @param message - Commit message
  */
-const runGitQuick = async (message: string): Promise<void> => {
+const runGitQuick = async (message: string, options: RunOptions = {}): Promise<void> => {
 	try {
 		debugLog('Starting gitquick workflow');
 		
@@ -109,7 +109,7 @@ const runGitQuick = async (message: string): Promise<void> => {
 		debugLog('Repository context', context);
 		
 		// Execute workflow
-		return await executeGitWorkflow(validatedMessage, context);
+		return await executeGitWorkflow(validatedMessage, context, options);
 	} catch (error: any) {
 		handleError(error);
 		process.exit(1);
@@ -199,7 +199,7 @@ const parseOriginUrl = async (rawRemoteUrl: string): Promise<string> => {
  * @param message - Commit message
  * @param context - Context object containing remoteUrl and currentBranch
  */
-const executeGitWorkflow = async (message: string, context: GitContext): Promise<void> => {
+const executeGitWorkflow = async (message: string, context: GitContext, options: RunOptions = {}): Promise<void> => {
 	const changes: FileChanges = await analyzeChanges();
 	
 	if (changes.totalCount === 0) {
@@ -219,6 +219,12 @@ const executeGitWorkflow = async (message: string, context: GitContext): Promise
 	
 	await stageChanges(changes.totalCount);
 	await commitChanges(message);
+
+	const targetBranch = options.targetBranch?.trim();
+	if (targetBranch) {
+		await syncWithTargetBranch(targetBranch, context);
+	}
+
 	await pushToRemote(message, context);
 };
 
@@ -354,6 +360,19 @@ const commitChanges = async (message: string): Promise<void> => {
 		spinner.success({ text: white(`'${message}' successfully committed`) });
 	} catch (error: any) {
 		spinner.error({ text: red(bold('ERROR! ')) + white(`${error}`) });
+		throw error;
+	}
+};
+
+const syncWithTargetBranch = async (targetBranch: string, context: GitContext): Promise<void> => {
+	const spinner = createSpinner(`Syncing ${context.currentBranch || 'current branch'} with ${targetBranch}...`).start();
+	try {
+		await commands.fetchTargetBranch(targetBranch);
+		await commands.mergeTargetBranch(targetBranch);
+		spinner.success({ text: logs.targetSyncSuccess(targetBranch) });
+	} catch (error: any) {
+		const errorText: string = error?.all || error?.message || String(error);
+		spinner.error({ text: logs.targetSyncError(targetBranch, errorText) });
 		throw error;
 	}
 };

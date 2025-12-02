@@ -7,6 +7,10 @@ export interface GitContext {
 	currentBranch: string;
 }
 
+export interface RunOptions {
+	targetBranch?: string;
+}
+
 export interface CommandResult {
 	stdout: string;
 	stderr: string;

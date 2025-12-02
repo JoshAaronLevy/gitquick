@@ -107,6 +107,30 @@ const pushUpstream = async (currentBranch: string): Promise<CommandResult> => {
 	return result;
 };
 
+const fetchTargetBranch = async (targetBranch: string): Promise<CommandResult> => {
+	const sanitizedBranch = targetBranch.trim();
+	const result: CommandResult = execGitCommand(`git fetch origin ${sanitizedBranch}`);
+	if (result.code !== 0) {
+		const error: any = new Error(result.stderr || `Failed to fetch origin/${sanitizedBranch}`);
+		error.exitCode = result.code;
+		error.all = result.all;
+		throw error;
+	}
+	return result;
+};
+
+const mergeTargetBranch = async (targetBranch: string): Promise<CommandResult> => {
+	const sanitizedBranch = targetBranch.trim();
+	const result: CommandResult = execGitCommand(`git merge --no-edit origin/${sanitizedBranch}`);
+	if (result.code !== 0) {
+		const error: any = new Error(result.stderr || `Failed to merge origin/${sanitizedBranch}`);
+		error.exitCode = result.code;
+		error.all = result.all;
+		throw error;
+	}
+	return result;
+};
+
 const pullWithRebase = async (currentBranch: string): Promise<CommandResult> => {
 	const branchTarget: string = currentBranch?.trim() ? ` ${currentBranch.trim()}` : '';
 	const command = `git pull --rebase origin${branchTarget}`.trim();
@@ -144,6 +168,8 @@ export const commands = {
   commitChanges,
   pushChanges,
   pushUpstream,
+	fetchTargetBranch,
+	mergeTargetBranch,
   pullWithRebase,
   pullWithMerge
 };
