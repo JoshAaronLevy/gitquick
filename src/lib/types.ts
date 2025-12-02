@@ -35,3 +35,31 @@ export interface FileChanges {
 	renamed: string[];
 	totalCount: number;
 }
+
+export type PushFailureType =
+	| 'NO_UPSTREAM'
+	| 'NON_FAST_FORWARD'
+	| 'AUTHENTICATION'
+	| 'NETWORK'
+	| 'GENERIC';
+
+export type PushResolutionAction =
+	| 'retryPush'
+	| 'pullWithRebase'
+	| 'pullWithMerge'
+	| 'setUpstream'
+	| 'abort';
+
+export interface PushResolutionOption {
+	label: string;
+	value: PushResolutionAction;
+	hint?: string;
+}
+
+export interface PushFailureScenario {
+	type: PushFailureType;
+	headline: string;
+	details: string;
+	options: PushResolutionOption[];
+	rawMessage: string;
+}

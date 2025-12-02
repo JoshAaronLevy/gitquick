@@ -1,12 +1,10 @@
 import { logs } from './messages.js';
 import { commands } from './commands.js';
 import {
-	GIT_EXIT_CODES,
 	GIT_STATUS_PATTERNS,
 	GIT_REMOTE_TYPES,
 	URL_PARSE_INDICES,
-	CHANGE_MESSAGES,
-	ERROR_MESSAGES
+	CHANGE_MESSAGES
 } from './constants.js';
 import { validateCommitMessage } from './validation.js';
 import {
@@ -17,8 +15,9 @@ import {
 } from './errors.js';
 import { createSpinner } from 'nanospinner';
 import { red, yellow, green, white, bold, dim } from 'colorette';
-import { GitContext, FileChanges } from './types.js';
-import { promptConfirmation } from './prompt.js';
+import { GitContext, FileChanges, PushResolutionAction, PushFailureScenario } from './types.js';
+import { promptConfirmation, promptPushResolution } from './prompt.js';
+import { determinePushFailureScenario } from './push-resolution.js';
 
 // Global debug flag
 let debugMode: boolean = false;
@@ -371,13 +370,9 @@ const pushToRemote = async (message: string, context: GitContext): Promise<void>
 		await commands.pushChanges();
 		spinner.success({ text: logs.pushSuccess(message, context.currentBranch, context.remoteUrl) });
 	} catch (error: any) {
-		// If upstream is not set, try to set it
-		if (error.exitCode === GIT_EXIT_CODES.UPSTREAM_NOT_SET) {
-			spinner.warn({ text: logs.pushingUpstream(context.currentBranch) });
-			await pushUpstream(message, context);
-		} else {
-			spinner.error({ text: logs.pushError(error) });
-		}
+		const errorText: string = error?.all || error?.message || String(error);
+		spinner.error({ text: logs.pushError(errorText) });
+		await handlePushFailure(error, message, context);
 	}
 };
 
@@ -394,5 +389,90 @@ const pushUpstream = async (message: string, context: GitContext): Promise<void>
 		spinner.success({ text: logs.pushSuccess(message, context.currentBranch, context.remoteUrl) });
 	} catch (error: any) {
 		spinner.error({ text: logs.pushUpstreamError(error) });
+		throw error;
 	}
+};
+
+const handlePushFailure = async (error: any, message: string, context: GitContext): Promise<void> => {
+	const scenario: PushFailureScenario = determinePushFailureScenario(error, context);
+	showPushFailureSummary(scenario);
+
+	while (true) {
+		const action = await promptPushResolution(scenario);
+		if (!action || action === 'abort') {
+			console.log(yellow('\nPush aborted. Resolve the issue and run gitquick again when ready.\n'));
+			return;
+		}
+
+		if (action === 'setUpstream') {
+			try {
+				await pushUpstream(message, context);
+				return;
+			} catch (actionError: any) {
+				console.error(red(bold('ACTION FAILED: ')) + white(actionError?.message || actionError));
+				continue;
+			}
+		}
+
+		if (action === 'retryPush') {
+			await pushToRemote(message, context);
+			return;
+		}
+
+		try {
+			await runResolutionAction(action, context);
+			await pushToRemote(message, context);
+			return;
+		} catch (actionError: any) {
+			console.error(red(bold('ACTION FAILED: ')) + white(actionError?.message || actionError));
+			console.error(yellow('Select another option or resolve the conflict manually.'));
+		}
+	}
+};
+
+const runResolutionAction = async (action: PushResolutionAction, context: GitContext): Promise<void> => {
+	switch (action) {
+		case 'pullWithRebase':
+			await runActionWithSpinner(
+				`Pulling latest changes for ${context.currentBranch || 'current branch'} (rebase)...`,
+				() => commands.pullWithRebase(context.currentBranch)
+			);
+			return;
+		case 'pullWithMerge':
+			await runActionWithSpinner(
+				`Pulling latest changes for ${context.currentBranch || 'current branch'} (merge)...`,
+				() => commands.pullWithMerge(context.currentBranch)
+			);
+			return;
+		default:
+			throw new Error(`Unsupported resolution action: ${action}`);
+	}
+};
+
+const runActionWithSpinner = async (label: string, task: () => Promise<any>): Promise<void> => {
+	const spinner = createSpinner(label).start();
+	try {
+		await task();
+		spinner.success();
+	} catch (error: any) {
+		spinner.error({ text: red(bold('ERROR! ')) + white(error?.message || error) });
+		throw error;
+	}
+};
+
+const showPushFailureSummary = (scenario: PushFailureScenario): void => {
+	console.log('\n' + red(bold('Push failed: ')) + white(scenario.headline));
+	console.log(white(scenario.details));
+	if (scenario.rawMessage) {
+		console.log(dim('\nGit output:'));
+		console.log(dim(truncateGitMessage(scenario.rawMessage)) + '\n');
+	}
+};
+
+const truncateGitMessage = (message: string, maxLines: number = 8): string => {
+	const lines = message.split('\n').filter(line => line.trim() !== '');
+	if (lines.length <= maxLines) {
+		return lines.join('\n');
+	}
+	return lines.slice(0, maxLines).join('\n') + '\n...';
 };

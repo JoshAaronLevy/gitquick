@@ -107,6 +107,32 @@ const pushUpstream = async (currentBranch: string): Promise<CommandResult> => {
 	return result;
 };
 
+const pullWithRebase = async (currentBranch: string): Promise<CommandResult> => {
+	const branchTarget: string = currentBranch?.trim() ? ` ${currentBranch.trim()}` : '';
+	const command = `git pull --rebase origin${branchTarget}`.trim();
+	const result: CommandResult = execGitCommand(command);
+	if (result.code !== 0) {
+		const error: any = new Error(result.stderr || 'Failed to pull with rebase');
+		error.exitCode = result.code;
+		error.all = result.all;
+		throw error;
+	}
+	return result;
+};
+
+const pullWithMerge = async (currentBranch: string): Promise<CommandResult> => {
+	const branchTarget: string = currentBranch?.trim() ? ` ${currentBranch.trim()}` : '';
+	const command = `git pull origin${branchTarget}`.trim();
+	const result: CommandResult = execGitCommand(command);
+	if (result.code !== 0) {
+		const error: any = new Error(result.stderr || 'Failed to pull latest changes');
+		error.exitCode = result.code;
+		error.all = result.all;
+		throw error;
+	}
+	return result;
+};
+
 export const commands = {
   checkGitInstalled,
   checkGitRepository,
@@ -117,5 +143,7 @@ export const commands = {
   stageFiles,
   commitChanges,
   pushChanges,
-  pushUpstream
+  pushUpstream,
+  pullWithRebase,
+  pullWithMerge
 };

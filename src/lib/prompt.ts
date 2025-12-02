@@ -1,9 +1,10 @@
 import Enquirer from 'enquirer';
 import { createSpinner } from 'nanospinner';
 import { red, yellow, white, bold, dim, cyan, green } from 'colorette';
-import { validateCommitMessage, checkCommitMessageLength } from './validation.js';
+import { validateCommitMessage } from './validation.js';
 import { ValidationError } from './errors.js';
 import { VALIDATION } from './constants.js';
+import { PushFailureScenario, PushResolutionAction } from './types.js';
 
 interface PromptResponse {
 	commitMessage: string;
@@ -148,4 +149,23 @@ const promptConfirmation = async (): Promise<boolean> => {
 	}
 };
 
-export { promptCommitMessage, promptLongCommitMessage, promptConfirmation };
+const promptPushResolution = async (scenario: PushFailureScenario): Promise<PushResolutionAction | null> => {
+	try {
+		const enquirer = new Enquirer();
+		const response = await enquirer.prompt({
+			type: 'select',
+			name: 'action',
+			message: 'Choose how gitquick should proceed:',
+			choices: scenario.options.map(option => ({
+				name: option.value,
+				message: option.label,
+				hint: option.hint
+			}))
+		}) as { action: PushResolutionAction };
+		return response.action;
+	} catch (error: any) {
+		return null;
+	}
+};
+
+export { promptCommitMessage, promptLongCommitMessage, promptConfirmation, promptPushResolution };
