@@ -40,6 +40,13 @@ export interface FileChanges {
 	totalCount: number;
 }
 
+export type GitCliPreference = 'None' | 'GitHub' | 'GitLab' | null;
+
+export interface GitQuickProjectConfig {
+	projectName: string;
+	gitCli: GitCliPreference;
+}
+
 export type PushFailureType =
 	| 'NO_UPSTREAM'
 	| 'NON_FAST_FORWARD'

@@ -168,4 +168,19 @@ const promptPushResolution = async (scenario: PushFailureScenario): Promise<Push
 	}
 };
 
-export { promptCommitMessage, promptLongCommitMessage, promptConfirmation, promptPushResolution };
+const promptGitCliPreference = async (): Promise<'Yes' | 'No' | null> => {
+	try {
+		const enquirer = new Enquirer();
+		const response = await enquirer.prompt({
+			type: 'select',
+			name: 'gitCliChoice',
+			message: 'Do you want gitquick to use the GitHub/GitLab CLI for this project? (Yes/No)',
+			choices: ['Yes', 'No']
+		}) as { gitCliChoice: 'Yes' | 'No' };
+		return response.gitCliChoice;
+	} catch (error: any) {
+		return null;
+	}
+};
+
+export { promptCommitMessage, promptLongCommitMessage, promptConfirmation, promptPushResolution, promptGitCliPreference };
