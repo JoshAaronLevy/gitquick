@@ -1,5 +1,7 @@
 ### Response Instructions to Add
 
+- First, I want you to find the part(s) of the existing instructions that relate to asking the user/dev if they want you to update a version number and add a `CHANGELOG.md` entry and remove those instructions. It should no longer ask that after completing a task.
+
 * For **technical or programming prompts**, include:
 
   * Thoughtful edge cases
